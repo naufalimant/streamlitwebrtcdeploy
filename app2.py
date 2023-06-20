@@ -223,6 +223,8 @@ def main():
 
         elif act_type_2 == "Take a photo manually":
             st.subheader("Take picture manually")
+            if st.button("I'm using phone"):
+                st.write('Using phone')
             with st.expander("See area of scan"):
                 st.write("Before you take a photo, make sure each of Braille character is on the area of scan.")
                 st.image("./assets/example_scan.png")
