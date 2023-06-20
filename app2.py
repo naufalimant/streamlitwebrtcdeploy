@@ -172,7 +172,7 @@ def main():
                 #     cv2.imwrite("frame.jpg", img)
                 #     count=0
                 # count+=1
-                st.write('AAA')
+                # st.write('AAA')
             # st.write('Predicted label:', predicted_label)
 
             # st.image(video_frame_callback)
