@@ -20,7 +20,7 @@ def get_ice_servers():
     
     try:
         os.environ['account_sid'] = 'ACe9b0279a642df6951ab31930eb18042b'
-        os.environ['auth_token'] = '9e395b6c8c75c454273cc75aff7e92d0'
+        os.environ['auth_token'] = '3314e95181782613a0d8e4bd1765213b'
         # account_sid = os.environ["ACe9b0279a642df6951ab31930eb18042b"]
         # auth_token = os.environ["9e395b6c8c75c454273cc75aff7e92d0"]
     except KeyError:
