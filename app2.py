@@ -11,6 +11,7 @@ import streamlit as st
 import torch
 from streamlit_webrtc import WebRtcMode, webrtc_streamer
 from PIL import Image
+import PIL
 import threading
 
 from sample_utils.turn import get_ice_servers
@@ -238,8 +239,8 @@ def main():
                     image = load_image(img_file_buffer)
                     image = image.convert('RGB')
                     width, height = image.size
-                    image = cv2.rotate(image, cv2.ROTATE_90_COUNTERCLOCKWISE)
-                    st.write(image)
+                    image = image.rotate(90, PIL.Image.NEAREST, expand = 1)
+                    st.image(image)
                     # img = img[int(height2/2-100):int(height2/2+100),:]
                     crop = image.crop((0,height/2-75,width,height/2+75))
                     width2, height2 = crop.size
