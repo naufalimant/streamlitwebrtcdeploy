@@ -223,8 +223,6 @@ def main():
 
         elif act_type_2 == "Take a photo manually":
             st.subheader("Take picture manually")
-            if st.button("I'm using phone"):
-                st.write('Using phone')
             with st.expander("See area of scan"):
                 st.write("Before you take a photo, make sure each of Braille character is on the area of scan.")
                 st.image("./assets/example_scan.png")
@@ -234,34 +232,67 @@ def main():
             label = {key:value for key, value in enumerate(all_labels, start=0)}   
 
             img_file_buffer = st.camera_input("Take a picture")
-            if img_file_buffer is not None:
-                image = load_image(img_file_buffer)
-                image = image.convert('RGB')
-                width, height = image.size
-                # img = img[int(height2/2-100):int(height2/2+100),:]
-                crop = image.crop((0,height/2-75,width,height/2+75))
-                width2, height2 = crop.size
-                num = round(width2/height2/0.75)
-                w = width2/num
-                # image = image.crop(())
-                # st.write(num)
-                # st.image(crop)
-                
-                # image = image[int(height/2-100):int(height/2+100),:]
+            phone = st.checkbox('Using phone')
+            if phone:
+                if img_file_buffer is not None:
+                    image = load_image(img_file_buffer)
+                    image = image.convert('RGB')
+                    width, height = image.size
+                    image = cv2.rotate(image, cv2.ROTATE_90_COUNTERCLOCKWISE)
+                    st.write(image)
+                    # img = img[int(height2/2-100):int(height2/2+100),:]
+                    crop = image.crop((0,height/2-75,width,height/2+75))
+                    width2, height2 = crop.size
+                    num = round(width2/height2/0.75)
+                    w = width2/num
+                    # image = image.crop(())
+                    # st.write(num)
+                    # st.image(crop)
 
-                letters=[]
-                for i in range (0,num):
-                    cropped = crop.crop((i*w,0,(i+1)*w,height2))
-                    st.image(cropped, "Cropped Image")
-                    cropped = np.array(cropped)
-                    cropped = cv2.resize(cropped, (200, 200))
-                    cropped = cropped.astype(np.float32) / 255.0
-                    cropped = torch.from_numpy(cropped[None, :, :, :])
-                    cropped = cropped.permute(0, 3, 1, 2)
-                    predicted_tensor = predict_model(cropped)
-                    _, predicted_letter = torch.max(predicted_tensor, 1)
-                    letters.append(chr(97 + predicted_letter))
-                    st.write('Predicted label:', letters[i])
+                    # image = image[int(height/2-100):int(height/2+100),:]
+
+                    letters=[]
+                    for i in range (0,num):
+                        cropped = crop.crop((i*w,0,(i+1)*w,height2))
+                        st.image(cropped, "Cropped Image")
+                        cropped = np.array(cropped)
+                        cropped = cv2.resize(cropped, (200, 200))
+                        cropped = cropped.astype(np.float32) / 255.0
+                        cropped = torch.from_numpy(cropped[None, :, :, :])
+                        cropped = cropped.permute(0, 3, 1, 2)
+                        predicted_tensor = predict_model(cropped)
+                        _, predicted_letter = torch.max(predicted_tensor, 1)
+                        letters.append(chr(97 + predicted_letter))
+                        st.write('Predicted label:', letters[i])
+            else:            
+                if img_file_buffer is not None:
+                    image = load_image(img_file_buffer)
+                    image = image.convert('RGB')
+                    width, height = image.size
+                    # img = img[int(height2/2-100):int(height2/2+100),:]
+                    crop = image.crop((0,height/2-75,width,height/2+75))
+                    width2, height2 = crop.size
+                    num = round(width2/height2/0.75)
+                    w = width2/num
+                    # image = image.crop(())
+                    # st.write(num)
+                    # st.image(crop)
+                    
+                    # image = image[int(height/2-100):int(height/2+100),:]
+    
+                    letters=[]
+                    for i in range (0,num):
+                        cropped = crop.crop((i*w,0,(i+1)*w,height2))
+                        st.image(cropped, "Cropped Image")
+                        cropped = np.array(cropped)
+                        cropped = cv2.resize(cropped, (200, 200))
+                        cropped = cropped.astype(np.float32) / 255.0
+                        cropped = torch.from_numpy(cropped[None, :, :, :])
+                        cropped = cropped.permute(0, 3, 1, 2)
+                        predicted_tensor = predict_model(cropped)
+                        _, predicted_letter = torch.max(predicted_tensor, 1)
+                        letters.append(chr(97 + predicted_letter))
+                        st.write('Predicted label:', letters[i])
                     
                     
 
