@@ -22,15 +22,6 @@ count=0
 image_container={'img':None}
 lock=threading.Lock()
 
-# def video_frame_callback(frame: av.VideoFrame) -> av.VideoFrame:
-#     image = frame.to_ndarray(format="bgr24")
-#     image = image[0:100,0:100]
-#     if count==10:
-#         cv2.imwrite("frame.jpg", image)
-#     count+=1
-#     print(count)
-#     return av.VideoFrame.from_ndarray(image, format="bgr24")
-
 @st.cache_data
 def load_image(img_file_buffer):
     img = Image.open(img_file_buffer)
@@ -91,7 +82,6 @@ def main():
 
                 predicted_index = predicted.item()
                 predicted_label = label[predicted_index]
-                # print("Predicted Label:", predicted_label)
                 st.write('Predicted label:', predicted_label)
         
         elif act_type_1 == "Scan manually":
@@ -100,26 +90,6 @@ def main():
             predict_model = get_model()
             all_labels = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'space', 'number', 'period', 'comma', 'colon', 'apostrophe', 'hyphen', 'semicolon', 'question', 'exclamation', 'capitalize'] 
             label = {key:value for key, value in enumerate(all_labels, start=0)}
-
-            # def make_prediction(img):
-            #     # global predicted_label
-            #     img = np.array(img)
-            #      # resize image to 28x28x3
-            #     img = cv2.resize(img, (200, 200))
-            #     # normalize to 0-1
-            #     img = img.astype(np.float32)/255.0
-            #     # st.image(img, caption="Uploaded Image")
-
-            #     img = torch.from_numpy(img)
-            #     img = img.unsqueeze(0)
-            #     img = img.permute(0,3,1,2)
-            #     with torch.no_grad(): 
-            #         outputs = predict_model(img)
-            #         _, predicted = torch.max(outputs, 1)
-
-            #     predicted_index = predicted.item()
-            #     predicted_label = label[predicted_index]
-            #     return predicted_label
             
             def video_frame_callback(frame: av.VideoFrame) -> av.VideoFrame:
                 
@@ -139,44 +109,43 @@ def main():
                 media_stream_constraints={"video": True, "audio": False},
                 async_processing=True,
             )
+            p = st.empty()
+            words=""
             while ctx.state.playing:
                 with lock:
                     img=image_container['img']
                 if img is None:
                     continue
                 width, height, _ = img.shape
-                # cropped = img.crop((i*w,0,(i+1)*w,height))
                 img = img[int(height/2-100):int(height/2+100),int(width/2-50):int(width/2+150)]
-                # make_prediction(img)
-                # img = img.convert('RGB')
+                img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
                 # f.show()
-                # img = np.array(img)
+                img = np.array(img)
                 #  # resize image to 28x28x3
-                # img = cv2.resize(img, (200, 200))
+                img = cv2.resize(img, (200, 200))
                 # # normalize to 0-1
-                # img = img.astype(np.float32)/255.0
+                img = img.astype(np.float32)/255.0
                 # # st.image(img, caption="Uploaded Image")
 
-                # img = torch.from_numpy(img)
-                # img = img.unsqueeze(0)
-                # img = img.permute(0,3,1,2)
-                # with torch.no_grad(): 
-                #     outputs = predict_model(img)
-                #     _, predicted = torch.max(outputs, 1)
+                img = torch.from_numpy(img)
+                img = img.unsqueeze(0)
+                img = img.permute(0,3,1,2)
+                with torch.no_grad(): 
+                    outputs = predict_model(img)
+                    _, predicted = torch.max(outputs, 1)
 
-                # predicted_index = predicted.item()
-                # predicted_label = label[predicted_index]
-                # return predicted_label
-                # print("Predicted Label:", predicted_label)
+                predicted_index = predicted.item()
+                predicted_label = label[predicted_index]
+                words+=predicted_label
                 
+                with p.container():
+                    st.write("Predicted label:", words)
+                
+                # for debugging the frame taken
                 # if count==100:
                 #     cv2.imwrite("frame.jpg", img)
                 #     count=0
                 # count+=1
-                # st.write('AAA')
-            # st.write('Predicted label:', predicted_label)
-
-            # st.image(video_frame_callback)
 
     elif selected_type == "Per words":
         st.subheader("Per words")
@@ -196,7 +165,6 @@ def main():
             label = {key:value for key, value in enumerate(all_labels, start=0)}
 
             if img_file_buffer is not None:
-                # make_prediction(img_file_buffer)
                 image = load_image(img_file_buffer)
                 image = image.convert('RGB')
                 width, height = image.size
@@ -220,7 +188,11 @@ def main():
                 # predicted_label = label[letters]
                 # print("Predicted Label:", predicted_label)
                 # for x in range(len(letters)):
-                st.write('Predicted label:', letters[:])
+                words=""
+                for x in letters:
+                    words+=x[-1]
+                st.write('Predicted label:', words)
+
 
         elif act_type_2 == "Take a photo manually":
             st.subheader("Take picture manually")
@@ -241,16 +213,10 @@ def main():
                     width, height = image.size
                     image = image.rotate(90, PIL.Image.NEAREST, expand = 1)
                     st.image(image)
-                    # img = img[int(height2/2-100):int(height2/2+100),:]
                     crop = image.crop((0,height/2-75,width,height/2+75))
                     width2, height2 = crop.size
                     num = round(width2/height2/0.75)
                     w = width2/num
-                    # image = image.crop(())
-                    # st.write(num)
-                    # st.image(crop)
-
-                    # image = image[int(height/2-100):int(height/2+100),:]
 
                     letters=[]
                     for i in range (0,num):
@@ -270,17 +236,11 @@ def main():
                     image = load_image(img_file_buffer)
                     image = image.convert('RGB')
                     width, height = image.size
-                    # img = img[int(height2/2-100):int(height2/2+100),:]
                     crop = image.crop((0,height/2-75,width,height/2+75))
                     width2, height2 = crop.size
                     num = round(width2/height2/0.75)
                     w = width2/num
-                    # image = image.crop(())
-                    # st.write(num)
-                    # st.image(crop)
                     
-                    # image = image[int(height/2-100):int(height/2+100),:]
-    
                     letters=[]
                     for i in range (0,num):
                         cropped = crop.crop((i*w,0,(i+1)*w,height2))
@@ -295,9 +255,5 @@ def main():
                         letters.append(chr(97 + predicted_letter))
                         st.write('Predicted label:', letters[i])
                     
-                    
-
-                
-
 if __name__ == "__main__":
     main()
