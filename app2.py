@@ -139,7 +139,7 @@ def main():
                 words+=predicted_label
                 
                 with p.container():
-                    st.write("Predicted label:", words)
+                    st.write("Predicted label:", predicted_label)
                 
                 # for debugging the frame taken
                 # if count==100:
