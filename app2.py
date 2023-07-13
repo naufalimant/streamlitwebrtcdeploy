@@ -145,6 +145,7 @@ def main():
                         st.image(crop)
                         st.write(img.shape)
                         st.write("Predicted label:", predicted_label)
+                        count=0
                 count+=1
                 
                 # for debugging the frame taken
