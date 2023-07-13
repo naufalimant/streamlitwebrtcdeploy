@@ -282,6 +282,11 @@ def main():
                         _, predicted_letter = torch.max(predicted_tensor, 1)
                         letters.append(chr(97 + predicted_letter))
                         st.write('Predicted label:', letters[i])
+
+                    words=""
+                    for x in letters:
+                        words+=x[-1]
+                    st.write('Predicted label:', words)
             else:            
                 if img_file_buffer is not None:
                     image = load_image(img_file_buffer)
@@ -305,6 +310,11 @@ def main():
                         _, predicted_letter = torch.max(predicted_tensor, 1)
                         letters.append(chr(97 + predicted_letter))
                         st.write('Predicted label:', letters[i])
+
+                    words=""
+                    for x in letters:
+                        words+=x[-1]
+                    st.write('Predicted label:', words)
                     
 if __name__ == "__main__":
     main()
