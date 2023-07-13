@@ -140,11 +140,11 @@ def main():
                 predicted_label = label[predicted_index]
                 words+=predicted_label
                 
-                with p.container():
-                    if count==500:
+                if count==500:
+                    with p.container():
                         st.write(img.shape)
                         st.write("Predicted label:", predicted_label)
-                    count+=1
+                count+=1
                 
                 # for debugging the frame taken
                 # if count==100:
