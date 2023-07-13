@@ -114,6 +114,7 @@ def main():
             while ctx.state.playing:
                 with lock:
                     img=image_container['img']
+                    st.write(img.shape)
                 if img is None:
                     continue
                 width, height, _ = img.shape
@@ -126,7 +127,7 @@ def main():
                 # # normalize to 0-1
                 img = img.astype(np.float32)/255.0
                 # # st.image(img, caption="Uploaded Image")
-                st.write(img.size)
+                
                 img = torch.from_numpy(img)
                 img = img.unsqueeze(0)
                 img = img.permute(0,3,1,2)
