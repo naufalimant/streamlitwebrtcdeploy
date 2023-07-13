@@ -140,7 +140,7 @@ def main():
                 predicted_label = label[predicted_index]
                 words+=predicted_label
                 
-                if count==250:
+                if count==100:
                     with p.container():
                         st.write(img.shape)
                         st.write("Predicted label:", predicted_label)
