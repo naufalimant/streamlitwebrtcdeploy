@@ -212,9 +212,9 @@ def main():
                     image = image.convert('RGB')
                     width, height = image.size
                     st.write(image.size)
-                    image = image.rotate(90, PIL.Image.NEAREST, expand = 1)
+                    # image = image.rotate(90, PIL.Image.NEAREST, expand = 1)
                     st.image(image)
-                    crop = image.crop((0,height/2-75,width,height/2+75))
+                    crop = image.crop((0,height/2-50,width,height/2+50))
                     width2, height2 = crop.size
                     num = round(width2/height2/0.75)
                     w = width2/num
