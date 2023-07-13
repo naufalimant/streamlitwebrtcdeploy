@@ -126,7 +126,7 @@ def main():
                     # f.show()
                     img = np.array(crop)
                     #  # resize image to 28x28x3
-                    img = cv2.resize(crop, (200, 200))
+                    # img = cv2.resize(crop, (200, 200))
                     # # normalize to 0-1
                     img = crop.astype(np.float32)/255.0
                     # # st.image(img, caption="Uploaded Image")
@@ -145,7 +145,6 @@ def main():
                     if count==25:
                         with p.container():
                             st.image(crop)
-                            st.write(img.shape)
                             st.write("Predicted label:", predicted_label)
                             count=0
                     count+=1
