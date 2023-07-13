@@ -109,45 +109,85 @@ def main():
                 media_stream_constraints={"video": True, "audio": False},
                 async_processing=True
             )
-            p = st.empty()
-            words=""
-            while ctx.state.playing:
-                with lock:
-                    img=image_container['img']
-                if img is None:
-                    continue
-                width, height, _ = img.shape
-                # st.write(img.shape)
-                crop = img[int(height/2-100):int(height/2+100),int(width/2-50):int(width/2+150)]
-                # st.write(img.shape)
-                img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-                # f.show()
-                img = np.array(img)
-                #  # resize image to 28x28x3
-                img = cv2.resize(img, (200, 200))
-                # # normalize to 0-1
-                img = img.astype(np.float32)/255.0
-                # # st.image(img, caption="Uploaded Image")
-                
-                img = torch.from_numpy(img)
-                img = img.unsqueeze(0)
-                img = img.permute(0,3,1,2)
-                with torch.no_grad(): 
-                    outputs = predict_model(img)
-                    _, predicted = torch.max(outputs, 1)
+            phone = st.checkbox('Using phone')
+            if phone:
+                p = st.empty()
+                words=""
+                while ctx.state.playing:
+                    with lock:
+                        img=image_container['img']
+                    if img is None:
+                        continue
+                    width, height, _ = img.shape
+                    # st.write(img.shape)
+                    crop = img[int(height/2-100):int(height/2+100),int(width/2-50):int(width/2+50)]
+                    # st.write(img.shape)
+                    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+                    # f.show()
+                    img = np.array(img)
+                    #  # resize image to 28x28x3
+                    img = cv2.resize(img, (200, 200))
+                    # # normalize to 0-1
+                    img = img.astype(np.float32)/255.0
+                    # # st.image(img, caption="Uploaded Image")
+                    
+                    img = torch.from_numpy(img)
+                    img = img.unsqueeze(0)
+                    img = img.permute(0,3,1,2)
+                    with torch.no_grad(): 
+                        outputs = predict_model(img)
+                        _, predicted = torch.max(outputs, 1)
 
-                predicted_index = predicted.item()
-                predicted_label = label[predicted_index]
-                words+=predicted_label
-                
-                if count==100:
-                    with p.container():
-                        st.image(crop)
-                        st.write(img.shape)
-                        st.write("Predicted label:", predicted_label)
-                        count=0
-                count+=1
-                
+                    predicted_index = predicted.item()
+                    predicted_label = label[predicted_index]
+                    words+=predicted_label
+                    
+                    if count==100:
+                        with p.container():
+                            st.image(crop)
+                            st.write(img.shape)
+                            st.write("Predicted label:", predicted_label)
+                            count=0
+                    count+=1
+                else:
+                    p = st.empty()
+                    words=""
+                    while ctx.state.playing:
+                        with lock:
+                            img=image_container['img']
+                        if img is None:
+                            continue
+                        width, height, _ = img.shape
+                        # st.write(img.shape)
+                        crop = img[int(height/2-100):int(height/2+100),int(width/2-50):int(width/2+150)]
+                        # st.write(img.shape)
+                        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+                        # f.show()
+                        img = np.array(img)
+                        #  # resize image to 28x28x3
+                        img = cv2.resize(img, (200, 200))
+                        # # normalize to 0-1
+                        img = img.astype(np.float32)/255.0
+                        # # st.image(img, caption="Uploaded Image")
+                        
+                        img = torch.from_numpy(img)
+                        img = img.unsqueeze(0)
+                        img = img.permute(0,3,1,2)
+                        with torch.no_grad(): 
+                            outputs = predict_model(img)
+                            _, predicted = torch.max(outputs, 1)
+
+                        predicted_index = predicted.item()
+                        predicted_label = label[predicted_index]
+                        words+=predicted_label
+                        
+                        if count==100:
+                            with p.container():
+                                st.image(crop)
+                                st.write(img.shape)
+                                st.write("Predicted label:", predicted_label)
+                                count=0
+                        count+=1
                 # for debugging the frame taken
                 # if count==100:
                 #     cv2.imwrite("frame.jpg", img)
@@ -171,6 +211,8 @@ def main():
             all_labels = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'space', 'number', 'period', 'comma', 'colon', 'apostrophe', 'hyphen', 'semicolon', 'question', 'exclamation', 'capitalize'] 
             label = {key:value for key, value in enumerate(all_labels, start=0)}
 
+            phone = st.checkbox('Using phone')
+            
             if img_file_buffer is not None:
                 image = load_image(img_file_buffer)
                 image = image.convert('RGB')
