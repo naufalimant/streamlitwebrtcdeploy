@@ -114,10 +114,10 @@ def main():
             while ctx.state.playing:
                 with lock:
                     img=image_container['img']
-                    st.write(img.shape)
                 if img is None:
                     continue
                 width, height, _ = img.shape
+                st.write(img.shape)
                 img = img[int(height/2-100):int(height/2+100),int(width/2-50):int(width/2+150)]
                 img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
                 # f.show()
