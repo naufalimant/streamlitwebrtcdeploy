@@ -119,6 +119,7 @@ def main():
                 width, height, _ = img.shape
                 st.write(img.shape)
                 img = img[int(height/2-100):int(height/2+100),int(width/2-50):int(width/2+150)]
+                
                 img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
                 # f.show()
                 img = np.array(img)
@@ -141,6 +142,7 @@ def main():
                 
                 with p.container():
                     st.write("Predicted label:", predicted_label)
+                    st.write(img.shape)
                 
                 # for debugging the frame taken
                 # if count==100:
