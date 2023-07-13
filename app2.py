@@ -142,7 +142,7 @@ def main():
                 
                 with p.container():
                     st.write("Predicted label:", predicted_label)
-                    st.write(img.shape)
+
                 
                 # for debugging the frame taken
                 # if count==100:
