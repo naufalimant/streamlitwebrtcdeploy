@@ -120,7 +120,7 @@ def main():
                         continue
                     width, height, _ = img.shape
                     # st.write(img.shape)
-                    crop = img[int(height/2-50):int(height/2+50),int(width/2-25):int(width/2+25)]
+                    crop = img[int(height/2):int(height/2+75),int(width/2):int(width/2+75)]
                     # st.write(img.shape)
                     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
                     # f.show()
