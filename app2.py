@@ -142,6 +142,7 @@ def main():
                 
                 if count==100:
                     with p.container():
+                        st.image(img)
                         st.write(img.shape)
                         st.write("Predicted label:", predicted_label)
                 count+=1
