@@ -107,7 +107,7 @@ def main():
                 },
                 video_frame_callback=video_frame_callback,
                 media_stream_constraints={"video": True, "audio": False},
-                async_processing=True,
+                async_processing=True
             )
             p = st.empty()
             words=""
@@ -211,6 +211,7 @@ def main():
                     image = load_image(img_file_buffer)
                     image = image.convert('RGB')
                     width, height = image.size
+                    st.write(image.size)
                     image = image.rotate(90, PIL.Image.NEAREST, expand = 1)
                     st.image(image)
                     crop = image.crop((0,height/2-75,width,height/2+75))
