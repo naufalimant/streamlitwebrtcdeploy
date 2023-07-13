@@ -122,11 +122,12 @@ def main():
                     # st.write(img.shape)
                     crop = img[int(height/2+25):int(height/2+125),int(width/2-125):int(width/2-50)]
                     # st.write(img.shape)
+                    img = img[int(height/2+25):int(height/2+125),int(width/2-125):int(width/2-50)]
                     img = cv2.cvtColor(crop, cv2.COLOR_BGR2RGB)
                     # f.show()
                     img = np.array(crop)
                     #  # resize image to 28x28x3
-                    # img = cv2.resize(crop, (200, 200))
+                    img = cv2.resize(crop, (200, 200))
                     # # normalize to 0-1
                     img = crop.astype(np.float32)/255.0
                     # # st.image(img, caption="Uploaded Image")
