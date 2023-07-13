@@ -142,7 +142,7 @@ def main():
                     predicted_label = label[predicted_index]
                     words+=predicted_label
                     
-                    if count==100:
+                    if count==50:
                         with p.container():
                             st.image(crop)
                             st.write(img.shape)
