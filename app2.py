@@ -143,7 +143,7 @@ def main():
                     predicted_label = label[predicted_index]
                     words+=predicted_label
                     
-                    if count==25:
+                    if count==15:
                         with p.container():
                             st.image(crop)
                             st.write("Predicted label:", predicted_label)
@@ -181,10 +181,10 @@ def main():
                         predicted_label = label[predicted_index]
                         words+=predicted_label
                         
-                        if count==100:
+                        if count==15:
                             with p.container():
                                 st.image(crop)
-                                st.write(img.shape)
+                                # st.write(img.shape)
                                 st.write("Predicted label:", predicted_label)
                                 count=0
                         count+=1
@@ -260,8 +260,8 @@ def main():
                     image = load_image(img_file_buffer)
                     image = image.convert('RGB')
                     width, height = image.size
-                    st.write(image.size)
-                    st.image(image)
+                    # st.write(image.size)
+                    # st.image(image)
                     # image = image.rotate(90, PIL.Image.NEAREST, expand = 1)
                     crop = image.crop((0,height/2-50,width,height/2+50))
                     st.image(crop)
@@ -309,7 +309,7 @@ def main():
                         predicted_tensor = predict_model(cropped)
                         _, predicted_letter = torch.max(predicted_tensor, 1)
                         letters.append(chr(97 + predicted_letter))
-                        st.write('Predicted label:', letters[i])
+                        # st.write('Predicted label:', letters[i])
 
                     words=""
                     for x in letters:
