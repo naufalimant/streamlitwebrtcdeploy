@@ -118,7 +118,7 @@ def main():
                     continue
                 width, height, _ = img.shape
                 # st.write(img.shape)
-                img = img[int(height/2-100):int(height/2+100),int(width/2-50):int(width/2+150)]
+                crop = img[int(height/2-100):int(height/2+100),int(width/2-50):int(width/2+150)]
                 # st.write(img.shape)
                 img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
                 # f.show()
@@ -142,7 +142,7 @@ def main():
                 
                 if count==100:
                     with p.container():
-                        st.image(img)
+                        st.image(crop)
                         st.write(img.shape)
                         st.write("Predicted label:", predicted_label)
                 count+=1
